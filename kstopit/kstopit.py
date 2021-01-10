@@ -5,6 +5,7 @@ from typing import Optional, Union, Callable, Any
 
 # Pip
 import stopit
+from stopit.utils import BaseTimeout
 
 # ---------------------------------------------------------------------------------------------------------------------------------------- #
 
@@ -32,10 +33,10 @@ def signal_timeoutable(
         def wrapper(*args, **kwargs):
             return __run_with_timeout(
                 function,
-                timeout_function=stopit.SignalTimeout,
-                name=name,
-                function_name=function_name,
-                timeout_param=timeout_param,
+                stopit.SignalTimeout,
+                name,
+                function_name,
+                timeout_param,
                 *args,
                 **kwargs
             )
@@ -63,10 +64,10 @@ def threading_timeoutable(
         def wrapper(*args, **kwargs):
             return __run_with_timeout(
                 function,
-                timeout_function=stopit.ThreadingTimeout,
-                name=name,
-                function_name=function_name,
-                timeout_param=timeout_param,
+                stopit.SignalTimeout,
+                name,
+                function_name,
+                timeout_param,
                 *args,
                 **kwargs
             )
@@ -79,7 +80,7 @@ def threading_timeoutable(
 
 def __run_with_timeout(
     function,
-    timeout_function: Callable,
+    timeout_function: BaseTimeout,
     name: Optional[str] = None,
     function_name: Optional[str] = None,
     timeout_param: Optional[str] = None,
