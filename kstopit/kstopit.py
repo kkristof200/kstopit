@@ -14,14 +14,27 @@ import stopit
 
 def signal_timeoutable(
     name: Optional[str] = None,
+    function_name: Optional[str] = None,
     timeout_param: Optional[str] = None
 ) -> Union[stopit.TimeoutException, Any]:
+    """Run a function with signal based timeout
+
+    Args:
+        name (Optional[str], optional): Will be used for raised Exception message. Defaults to None.
+        function_name (Optional[str], optional): Will be used for raised Exception message in the following format "Function 'function_name'", if 'name' is not provided. Defaults to None.
+        timeout_param (Optional[str], optional): The timeout param name to check in the kwargs of the passed function. Defaults to None(timeout).
+
+    Returns:
+        Union[stopit.TimeoutException, Any]: [description]
+    """
+
     def real_decorator(function):
         def wrapper(*args, **kwargs):
             return __run_with_timeout(
                 function,
                 timeout_function=stopit.SignalTimeout,
                 name=name,
+                function_name=function_name,
                 timeout_param=timeout_param,
                 *args,
                 **kwargs
@@ -32,14 +45,27 @@ def signal_timeoutable(
 
 def threading_timeoutable(
     name: Optional[str] = None,
+    function_name: Optional[str] = None,
     timeout_param: Optional[str] = None
 ) -> Union[stopit.TimeoutException, Any]:
+    """Run a function with threading based timeout
+
+    Args:
+        name (Optional[str], optional): Will be used for raised Exception message. Defaults to None.
+        function_name (Optional[str], optional): Will be used for raised Exception message in the following format "Function 'function_name'", if 'name' is not provided. Defaults to None.
+        timeout_param (Optional[str], optional): The timeout param name to check in the kwargs of the passed function. Defaults to None(timeout).
+
+    Returns:
+        Union[stopit.TimeoutException, Any]: [description]
+    """
+
     def real_decorator(function):
         def wrapper(*args, **kwargs):
             return __run_with_timeout(
                 function,
                 timeout_function=stopit.ThreadingTimeout,
                 name=name,
+                function_name=function_name,
                 timeout_param=timeout_param,
                 *args,
                 **kwargs
@@ -55,6 +81,7 @@ def __run_with_timeout(
     function,
     timeout_function: Callable,
     name: Optional[str] = None,
+    function_name: Optional[str] = None,
     timeout_param: Optional[str] = None,
     *args,
     **kwargs
@@ -74,7 +101,7 @@ def __run_with_timeout(
         except stopit.TimeoutException as e:
             return stopit.TimeoutException(
                 '{} did exceed maximum timeout value ({} {})'.format(
-                    '\'{}\''.format(name) or 'Function \'{}\''.format(function.__name__),
+                    '\'{}\''.format(name) if name else 'Function \'{}\''.format(function_name or function.__name__),
                     timeout,
                     'second' if timeout == 1 else 'seconds'
                 )

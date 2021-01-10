@@ -9,7 +9,17 @@ def f1():
     while True:
         time.sleep(0.1)
 
+@signal_timeoutable(name='test')
+def f2():
+    while True:
+        time.sleep(0.1)
+
 start = time.time()
 res = f1(timeout=1)
+duration = time.time() - start
+print(type(res), res, duration)
+
+start = time.time()
+res = f2(timeout=1)
 duration = time.time() - start
 print(type(res), res, duration)
