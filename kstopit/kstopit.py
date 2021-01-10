@@ -13,7 +13,7 @@ import stopit
 # ------------------------------------------------------------ Public methods ------------------------------------------------------------ #
 
 def signal_timeoutable(
-    function_name: Optional[str] = None,
+    name: Optional[str] = None,
     timeout_param: Optional[str] = None
 ) -> Union[stopit.TimeoutException, Any]:
     def real_decorator(function):
@@ -21,7 +21,7 @@ def signal_timeoutable(
             return __run_with_timeout(
                 function,
                 timeout_function=stopit.SignalTimeout,
-                function_name=function_name,
+                name=name,
                 timeout_param=timeout_param,
                 *args,
                 **kwargs
@@ -31,7 +31,7 @@ def signal_timeoutable(
     return real_decorator
 
 def threading_timeoutable(
-    function_name: Optional[str] = None,
+    name: Optional[str] = None,
     timeout_param: Optional[str] = None
 ) -> Union[stopit.TimeoutException, Any]:
     def real_decorator(function):
@@ -39,7 +39,7 @@ def threading_timeoutable(
             return __run_with_timeout(
                 function,
                 timeout_function=stopit.ThreadingTimeout,
-                function_name=function_name,
+                name=name,
                 timeout_param=timeout_param,
                 *args,
                 **kwargs
@@ -54,7 +54,7 @@ def threading_timeoutable(
 def __run_with_timeout(
     function,
     timeout_function: Callable,
-    function_name: Optional[str] = None,
+    name: Optional[str] = None,
     timeout_param: Optional[str] = None,
     *args,
     **kwargs
@@ -73,8 +73,8 @@ def __run_with_timeout(
                 return function(*args, **kwargs)
         except stopit.TimeoutException as e:
             return stopit.TimeoutException(
-                'Function \'{}\' did exceed maximum timeout value ({} {})'.format(
-                    function_name or function.__name__,
+                '{} did exceed maximum timeout value ({} {})'.format(
+                    '\'{}\''.format(name) or 'Function \'{}\''.format(function.__name__),
                     timeout,
                     'second' if timeout == 1 else 'seconds'
                 )
