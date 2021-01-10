@@ -1,7 +1,7 @@
 # --------------------------------------------------------------- Imports ---------------------------------------------------------------- #
 
 # System
-from typing import Optional, Union, Any
+from typing import Optional, Union, Callable, Any
 
 # Pip
 import stopit
@@ -13,56 +13,52 @@ import stopit
 # ------------------------------------------------------------ Public methods ------------------------------------------------------------ #
 
 def signal_timeoutable(
-    function,
-    timeout: Optional[int] = None,
-    timeout_param: Optional[str] = None,
     function_name: Optional[str] = None,
-    *args,
-    **kwargs
+    timeout_param: Optional[str] = None
 ) -> Union[stopit.TimeoutException, Any]:
-    def wrapper(*args, **kwargs):
-        return __run_with_timeout(
-            function,
-            stopit.SignalTimeout,
-            *args,
-            **kwargs
-        )
+    def real_decorator(function):
+        def wrapper(*args, **kwargs):
+            return __run_with_timeout(
+                function,
+                timeout_function=stopit.SignalTimeout,
+                function_name=function_name,
+                timeout_param=timeout_param,
+                *args,
+                **kwargs
+            )
 
-    return wrapper
+        return wrapper
+    return real_decorator
 
 def threading_timeoutable(
-    function,
-    timeout: Optional[int] = None,
-    timeout_param: Optional[str] = None,
     function_name: Optional[str] = None,
-    *args,
-    **kwargs
+    timeout_param: Optional[str] = None
 ) -> Union[stopit.TimeoutException, Any]:
-    def wrapper(*args, **kwargs):
-        return __run_with_timeout(
-            function,
-            stopit.ThreadingTimeout,
-            *args,
-            **kwargs
-        )
+    def real_decorator(function):
+        def wrapper(*args, **kwargs):
+            return __run_with_timeout(
+                function,
+                timeout_function=stopit.ThreadingTimeout,
+                function_name=function_name,
+                timeout_param=timeout_param,
+                *args,
+                **kwargs
+            )
 
-    return wrapper
+        return wrapper
+    return real_decorator
 
 
 # ----------------------------------------------------------- Private methods ------------------------------------------------------------ #
 
 def __run_with_timeout(
     function,
-    timeout_function,
+    timeout_function: Callable,
+    function_name: Optional[str] = None,
+    timeout_param: Optional[str] = None,
     *args,
     **kwargs
 ) -> Union[stopit.TimeoutException, Any]:
-    timeout_param = None
-
-    if 'timeout_param' in kwargs:
-        timeout_param = kwargs['timeout_param']
-        del kwargs['timeout']
-
     timeout_param = timeout_param or 'timeout'
 
     if timeout_param in kwargs:
@@ -70,12 +66,6 @@ def __run_with_timeout(
         del kwargs[timeout_param]
     else:
         timeout = None
-
-    if 'function_name' in kwargs:
-        function_name = kwargs['function_name']
-        del kwargs['function_name']
-    else:
-        function_name = None
 
     if timeout and timeout > 0:
         try:

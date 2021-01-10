@@ -1,8 +1,10 @@
+from typing import Union, Any
+
 import time
 
 from kstopit import signal_timeoutable, TimeoutException
 
-@signal_timeoutable
+@signal_timeoutable(function_name='test')
 def f1():
     while True:
         time.sleep(0.1)
