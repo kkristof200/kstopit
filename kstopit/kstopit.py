@@ -64,7 +64,7 @@ def threading_timeoutable(
         def wrapper(*args, **kwargs):
             return __run_with_timeout(
                 function,
-                stopit.SignalTimeout,
+                stopit.ThreadingTimeout,
                 name,
                 function_name,
                 timeout_param,
