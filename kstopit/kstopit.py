@@ -80,7 +80,7 @@ def threading_timeoutable(
 
 def __run_with_timeout(
     function,
-    timeout_function: BaseTimeout,
+    timeout_class: BaseTimeout, # needs class not object
     name: Optional[str] = None,
     function_name: Optional[str] = None,
     timeout_param: Optional[str] = None,
@@ -97,7 +97,7 @@ def __run_with_timeout(
 
     if timeout and timeout > 0:
         try:
-            with timeout_function(timeout, swallow_exc=False):
+            with timeout_class(timeout, swallow_exc=False):
                 return function(*args, **kwargs)
         except stopit.TimeoutException as e:
             return stopit.TimeoutException(
