@@ -6,6 +6,7 @@ from typing import Optional, Union, Callable, Any
 # Pip
 import stopit
 from stopit.utils import BaseTimeout
+import multiprocessing
 
 # ---------------------------------------------------------------------------------------------------------------------------------------- #
 
@@ -33,7 +34,7 @@ def signal_timeoutable(
         def wrapper(*args, **kwargs):
             return __run_with_timeout(
                 function,
-                stopit.SignalTimeout,
+                stopit.ThreadingTimeout,
                 name,
                 function_name,
                 timeout_param,
