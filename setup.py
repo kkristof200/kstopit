@@ -9,7 +9,7 @@ else:
 
 setuptools.setup(
     name="kstopit",
-    version="0.0.10",
+    version="0.0.11",
     author="Kristof",
     description="kstopit",
     long_description=long_description,
