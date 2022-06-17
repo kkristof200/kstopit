@@ -9,14 +9,18 @@ else:
 
 setuptools.setup(
     name="kstopit",
-    version="0.0.10",
+    version="0.0.11",
     author="Kristof",
     description="kstopit",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/kkristof200/py_kstopit",
     packages=setuptools.find_packages(),
-    install_requires=["stopit"],
+    install_requires=[
+        'aiohttp>=3.7.4.post0',
+        'setuptools>=62.4.0',
+        'stopit>=1.1.2'
+    ],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
