@@ -17,7 +17,6 @@ setuptools.setup(
     url="https://github.com/kkristof200/py_kstopit",
     packages=setuptools.find_packages(),
     install_requires=[
-        'aiohttp>=3.7.4.post0',
         'setuptools>=62.4.0',
         'stopit>=1.1.2'
     ],
