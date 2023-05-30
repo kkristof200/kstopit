@@ -9,7 +9,7 @@ else:
 
 setuptools.setup(
     name="kstopit",
-    version="0.0.12",
+    version="0.0.13",
     author="Kristof",
     description="kstopit",
     long_description=long_description,
@@ -17,8 +17,7 @@ setuptools.setup(
     url="https://github.com/kkristof200/py_kstopit",
     packages=setuptools.find_packages(),
     install_requires=[
-        'aiohttp>=3.7.4.post0',
-        'setuptools>=62.4.0',
+        'setuptools>=67.8.0',
         'stopit>=1.1.2'
     ],
     classifiers=[
