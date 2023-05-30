@@ -1,8 +1,7 @@
 # --------------------------------------------------------------- Imports ---------------------------------------------------------------- #
 
 # System
-from typing import Optional, Union, Callable, Any
-from aiohttp import Signal
+from typing import Optional, Union, Any
 
 # Pip
 import stopit
